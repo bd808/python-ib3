@@ -1,0 +1,12 @@
+*.egg-info
+*.py[co]
+/.cache/
+/.coverage
+/.eggs/
+/.tox/
+/.venv/
+/build/
+/build/
+/dist/
+/dist/
+__pycache__/

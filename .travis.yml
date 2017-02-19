@@ -1,0 +1,15 @@
+language: python
+python:
+  - "2.7"
+  - "3.5"
+sudo: false
+matrix:
+  fast_finish: true
+
+install:
+  - pip install wheel tox-travis
+  - python setup.py install bdist_wheel
+  - pip install ./dist/ib3-*.whl
+script:
+  - tox
+  - tox --installpkg ./dist/ib3-*.whl
