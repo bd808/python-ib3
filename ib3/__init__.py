@@ -17,12 +17,15 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 """Base IRC bot and mixins for commonly desired functionality."""
 
+import base64
 import functools
 import logging
+import ssl
 
 import irc.bot
 import irc.buffer
 import irc.client
+import irc.connection
 
 logger = logging.getLogger(__name__)
 
@@ -112,11 +115,27 @@ class RejoinOnBan(object):
             60, functools.partial(conn.join, event.arguments[0]))
 
 
-class FreenodePasswdAuth(object):
+class JoinChannels(object):
+    """Join channels one at a time to avoid flooding."""
+    def join_channels(self, channels):
+        """Join a list of channels, one at a time."""
+        try:
+            car, cdr = channels[0], channels[1:]
+        except (IndexError, TypeError):
+            logger.exception('Failed to find channel to join.')
+        else:
+            logger.info('Joining %s', car)
+            self.connection.join(car)
+            if cdr:
+                self.reactor.scheduler.execute_after(
+                    1, functools.partial(self.join_channels, cdr))
+
+
+class FreenodePasswdAuth(JoinChannels):
     """Authenticate with NickServ before joining channels."""
     def __init__(
             self, server_list, nickname, realname,
-            ident_password, channels, **kwargs):
+            ident_password, channels=[], **kwargs):
         """
         :param server_list: List of servers the bot will use.
         :param nickname: The bot's nickname
@@ -178,8 +197,7 @@ class FreenodePasswdAuth(object):
                 self._identify_to_nickserv()
             elif 'You are now identified' in msg:
                 logger.debug('Authentication succeeded')
-                self.reactor.scheduler.execute_after(
-                    1, self._join_next_channel)
+                self.join_channels(self._channels)
             elif 'Invalid password' in msg:
                 logger.error('Password invalid. Check your config!')
                 self.die()
@@ -189,21 +207,6 @@ class FreenodePasswdAuth(object):
         logger.info('Authenticating to NickServ')
         self.connection.privmsg('NickServ', 'identify %s %s' % (
             self._primary_nick, self._ident_password))
-
-    def _join_next_channel(self, channels=None):
-        """Join the next channel in our join list."""
-        if channels is None:
-            channels = self._channels
-        try:
-            car, cdr = channels[0], channels[1:]
-        except (IndexError, TypeError):
-            logger.exception('Failed to find channel to join.')
-        else:
-            logger.info('Joining %s', car)
-            self.connection.join(car)
-            if cdr:
-                self.reactor.scheduler.execute_after(
-                    1, functools.partial(self._join_next_channel, cdr))
 
     def _nickserv_regain(self):
         if not self.has_primary_nick():
@@ -218,3 +221,79 @@ class FreenodePasswdAuth(object):
     def has_primary_nick(self):
         """Do we currently have our primary nick?"""
         return self.connection.get_nickname() == self._primary_nick
+
+
+class SASL(JoinChannels):
+    def __init__(
+            self, server_list, nickname, realname,
+            ident_password, channels=[], username=None, **kwargs):
+        """
+        :param server_list: List of servers the bot will use.
+        :param nickname: The bot's nickname
+        :param realname: The bot's realname
+        :param ident_password: The bot's password
+        :param channels: List of channels to join after authenticating
+        """
+        self._primary_nick = nickname
+        self._username = username or nickname
+        self._ident_password = ident_password
+        self._channels = channels
+
+        super(SASL, self).__init__(
+                server_list=server_list,
+                nickname=nickname,
+                realname=realname,
+                username=self._username,
+                **kwargs)
+        self.reactor._on_connect = self._handle_connect
+
+        for event in ['cap', 'authenticate', '903', '908', 'welcome']:
+            logger.debug('Registering for %s', event)
+            self.connection.add_global_handler(
+                event, getattr(self, '_handle_%s' % event))
+
+    def _handle_connect(self, sock):
+        """Send CAP REQ :sasl on connect."""
+        self.connection.cap('REQ', 'sasl')
+
+    def _handle_cap(self, conn, event):
+        """Handle CAP responses."""
+        if event.arguments and event.arguments[0] == 'ACK':
+            conn.send_raw('AUTHENTICATE PLAIN')
+        else:
+            logger.warning('Unexpcted CAP response: %s', event)
+            conn.disconnect()
+
+    def _handle_authenticate(self, conn, event):
+        """Handle AUTHENTICATE responses."""
+        if event.target == '+':
+            creds = '{username}\0{username}\0{password}'.format(
+                username=self._username,
+                password=self._ident_password)
+            conn.send_raw('AUTHENTICATE {}'.format(
+                    base64.b64encode(creds.encode('utf8')).decode('utf8')))
+        else:
+            logger.warning('Unexpcted AUTHENTICATE response: %s', event)
+            conn.disconnect()
+
+    def _handle_903(self, conn, event):
+        """Handle 903 RPL_SASLSUCCESS responses."""
+        self.connection.cap('END')
+
+    def _handle_908(self, conn, event):
+        """Handle 908 RPL_SASLMECHS responses."""
+        logger.warning('SASL PLAIN not supported: %s', event)
+        self.die()
+
+    def _handle_welcome(self, conn, event):
+        """Handle WELCOME message."""
+        logger.info('Connected to server %s', conn.get_server_name())
+        self.join_channels(self._channels)
+
+
+class SSL(object):
+    """Use SSL connections."""
+    def __init__(self, *args, **kwargs):
+        kwargs['connect_factory'] = irc.connection.Factory(
+            wrapper=ssl.wrap_socket)
+        super(SSL, self).__init__(*args, **kwargs)
