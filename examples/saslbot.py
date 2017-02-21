@@ -22,6 +22,9 @@ import logging
 import irc.strings
 
 import ib3
+import ib3.auth
+import ib3.connection
+import ib3.nick
 
 
 logging.basicConfig(
@@ -34,8 +37,8 @@ logging.captureWarnings(True)
 logger = logging.getLogger('saslbot')
 
 
-class SaslBot(ib3.SASL, ib3.SSL, ib3.Bot):
-    """Example bot showing use of SASL auth and SSL encryption."""
+class SaslBot(ib3.auth.SASL, ib3.nick.Regain, ib3.connection.SSL, ib3.Bot):
+    """Example bot showing use of SASL auth, REGAIN, and SSL encryption."""
     def on_privmsg(self, conn, event):
         self.do_command(conn, event, event.arguments[0])
 

@@ -20,11 +20,7 @@ import argparse
 import logging
 
 from ib3 import Bot
-from ib3 import DisconnectOnError
-from ib3 import FreenodePasswdAuth
-from ib3 import Ping
-from ib3 import RejoinOnBan
-from ib3 import RejoinOnKick
+from ib3.auth import NickServ
 
 
 logging.basicConfig(
@@ -35,10 +31,7 @@ logging.basicConfig(
 logging.captureWarnings(True)
 
 
-class TestBot(
-    FreenodePasswdAuth, Ping, DisconnectOnError,
-    RejoinOnBan, RejoinOnKick, Bot
-):
+class TestBot(NickServ, Bot):
     pass
 
 

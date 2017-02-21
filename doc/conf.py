@@ -15,11 +15,16 @@ sys.path.insert(0, os.path.abspath('../'))
 
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
 ]
 
-# General information about the project.
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'irc': ('https://python-irc.readthedocs.io/en/stable/', None),
+}
 
+# General information about the project.
 root = os.path.join(os.path.dirname(__file__), '..')
 setup_script = os.path.join(root, 'setup.py')
 fields = ['--name', '--version', '--author']

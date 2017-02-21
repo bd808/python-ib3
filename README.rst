@@ -4,24 +4,34 @@ IRC Bot Behavior Bundle (IB3)
 
 IRC bot framework using mixins to provide commonly desired functionality.
 
-Mixins
-======
-* DisconnectOnError: Handle ERROR message by logging and disconnecting
-* FreenodePasswdAuth: Authenticate with NickServ before joining channels
-* Ping: Add checks for connection liveness using PING commands
-* RejoinOnBan: Handle ERR_BANNEDFROMCHAN by attempting to rejoin channel
-* RejoinOnKick: Handle KICK by attempting to rejoin channel
+About
+=====
+The `irc`_ python library's ``irc.bot.SingleServerIRCBot`` provides a nice
+base for making a new bot, but there are many common tasks needed by a robust
+bot that it does not handle out of the box. IB3 collects some commonly desired
+behaviors for a bot as `mixin`_ classes that can be used via `multiple
+inheritance`_::
+
+    from ib3 import Bot
+    from ib3.auth import SASL
+    from ib3.connections import SSL
+    from ib3.mixins import DisconnectOnError
+
+    class TestBot(SASL, SSL, DisconnectOnError, Bot):
+        pass
 
 License
 =======
-`GNU GPLv3+`_
+IB3 is licensed under the `GNU GPLv3+`_ license.
 
-Some code and much inspiration taken from:
+Credits
+=======
+Some code and much inspiration taken from Wikimedia irc bots `Adminbot`_,
+`Jouncebot`_, and `Stashbot`_.
 
-* `Adminbot`_
-* `Jouncebot`_
-* `Stashbot`_
-
+.. _irc: https://pypi.org/project/irc/
+.. _mixin: https://en.wikipedia.org/wiki/Mixin
+.. _multiple inheritance: https://docs.python.org/3/tutorial/classes.html#multiple-inheritance
 .. _GNU GPLv3+: https://www.gnu.org/copyleft/gpl.html
 .. _Adminbot: https://phabricator.wikimedia.org/diffusion/ODAC/
 .. _Jouncebot: https://phabricator.wikimedia.org/diffusion/GJOU/

@@ -17,26 +17,16 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import ssl
 
-import irc.bot
-import irc.buffer
-import irc.client
+import irc.connection
 
 logger = logging.getLogger(__name__)
 
 
-class Bot(irc.bot.SingleServerIRCBot):
-    """Basic IRC bot.
-
-    Simple subclass of ``irc.bot.SingleServerIRCBot`` that sets up lenient
-    UTF-8 encoding handling for inbound messages. This is a nice base to start
-    from when adding other IB3 mixins.
-    """
+class SSL(object):
+    """Use SSL connections."""
     def __init__(self, *args, **kwargs):
-        # A UTF-8 only world is a nice dream but the real world is all yucky
-        # and full of legacy encoding issues that should not crash our bot.
-        irc.buffer.LenientDecodingLineBuffer.errors = 'replace'
-        irc.client.ServerConnection.buffer_class = \
-            irc.buffer.LenientDecodingLineBuffer
-
-        super(Bot, self).__init__(*args, **kwargs)
+        kwargs['connect_factory'] = irc.connection.Factory(
+            wrapper=ssl.wrap_socket)
+        super(SSL, self).__init__(*args, **kwargs)
