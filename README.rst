@@ -4,8 +4,8 @@ IRC Bot Behavior Bundle (IB3)
 
 IRC bot framework using mixins to provide commonly desired functionality.
 
-About
-=====
+Overview
+========
 The `irc`_ python library's ``irc.bot.SingleServerIRCBot`` provides a nice
 base for making a new bot, but there are many common tasks needed by a robust
 bot that it does not handle out of the box. IB3 collects some commonly desired
@@ -19,6 +19,11 @@ inheritance`_::
 
     class TestBot(SASL, SSL, DisconnectOnError, Bot):
         pass
+
+Installation
+============
+* ``pip install ib3`` (recommended)
+* ``python setup.py install`` (from source distribution)
 
 License
 =======

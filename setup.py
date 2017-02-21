@@ -26,6 +26,7 @@ params = dict(
     author='Bryan Davis',
     author_email='bd808@bd808.com',
     url='https://github.com/bd808/python-ib3',
+    download_url='https://pypi.python.org/pypi/ib3',
     packages=setuptools.find_packages(
         exclude=['docs', 'tests', 'tests.*']),
     include_package_data=True,
