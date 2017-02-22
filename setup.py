@@ -30,6 +30,9 @@ params = dict(
     packages=setuptools.find_packages(
         exclude=['docs', 'tests', 'tests.*']),
     include_package_data=True,
+    install_requires=[
+        'irc>=15.0.3',
+    ],
     extras_require={
         'testing': tests_require,
     },
