@@ -14,7 +14,7 @@ inheritance`_::
 
     from ib3 import Bot
     from ib3.auth import SASL
-    from ib3.connections import SSL
+    from ib3.connection import SSL
     from ib3.mixins import DisconnectOnError
 
     class TestBot(SASL, SSL, DisconnectOnError, Bot):
