@@ -19,7 +19,7 @@
 import logging
 
 import irc.bot
-import irc.buffer
+from jaraco.stream import buffer
 import irc.client
 
 logger = logging.getLogger(__name__)
@@ -35,8 +35,8 @@ class Bot(irc.bot.SingleServerIRCBot):
     def __init__(self, *args, **kwargs):
         # A UTF-8 only world is a nice dream but the real world is all yucky
         # and full of legacy encoding issues that should not crash our bot.
-        irc.buffer.LenientDecodingLineBuffer.errors = 'replace'
+        buffer.LenientDecodingLineBuffer.errors = 'replace'
         irc.client.ServerConnection.buffer_class = \
-            irc.buffer.LenientDecodingLineBuffer
+            buffer.LenientDecodingLineBuffer
 
         super(Bot, self).__init__(*args, **kwargs)

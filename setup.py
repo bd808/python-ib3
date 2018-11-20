@@ -33,7 +33,8 @@ params = dict(
         exclude=['docs', 'tests', 'tests.*']),
     include_package_data=True,
     install_requires=[
-        'irc>=15.0.3',
+        "irc>16,<17; python_version<'3'",
+        "irc>=17.0; python_version>='3.4'",
     ],
     extras_require={
         'testing': tests_require,
