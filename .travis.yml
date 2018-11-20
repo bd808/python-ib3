@@ -1,15 +1,48 @@
+---
 language: python
-python:
-  - "2.7"
-  - "3.5"
-sudo: false
-matrix:
-  fast_finish: true
+cache:
+  - pip
+  - directories:
+      - $HOME/.cache
+os:
+  - linux
+before_install:
+  - if [ -z ${VIRTUAL_ENV+x} ]; then export PIP_USER=1; fi; python -m pip install 'tox>=3.2.1' tox-pyenv tox-travis twine wheel
+jobs:
+  include:
+    - script: python -m tox
+      env: TOXENV=flake8
+    - script: python -m tox
+      env: TOXENV=docs
+    - script:
+        - python -m tox
+        - tox --installpkg ./dist/ib3-*.whl
+      env: TOXENV=py37
+      python: "3.7"
+      # begin: workaround to enable support for py37: https://github.com/travis-ci/travis-ci/issues/9815
+      dist: xenial
+      sudo: required
+      # end
+    - script:
+        - python -m tox
+        - tox --installpkg ./dist/ib3-*.whl
+      env: TOXENV=py36
+      python: "3.6"
+    - script:
+        - python -m tox
+        - tox --installpkg ./dist/ib3-*.whl
+      env: TOXENV=py35
+      python: "3.5"
+    - script:
+        - python -m tox
+        - tox --installpkg ./dist/ib3-*.whl
+      env: TOXENV=py27
+      python: "2.7"
 
+sudo: false
 install:
-  - pip install wheel tox-travis
-  - python setup.py install bdist_wheel
+  - python setup.py sdist bdist_wheel install
   - pip install ./dist/ib3-*.whl
-script:
-  - tox
-  - tox --installpkg ./dist/ib3-*.whl
+env:
+  global:
+    - PIP_DISABLE_PIP_VERSION_CHECK=1
