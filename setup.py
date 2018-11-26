@@ -10,7 +10,10 @@ setup_requires = [
 if 'nosetests' in sys.argv[1:]:
     setup_requires.append('nose>=1.0')
 
-tests_require = ['nose>=1.0']
+tests_require = [
+    'coverage',
+    'nose>=1.0',
+]
 
 name = 'ib3'
 description = 'IRC bot framework using mixins to provide common functionality'
