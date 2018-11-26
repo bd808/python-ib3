@@ -3,6 +3,7 @@
 /.cache/
 /.coverage
 /.eggs/
+/.python-version
 /.tox/
 /.venv/
 /build/
