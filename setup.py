@@ -12,6 +12,7 @@ if 'nosetests' in sys.argv[1:]:
 
 tests_require = [
     'coverage',
+    "mock; python_version<'3.3'",
     'nose>=1.0',
 ]
 
