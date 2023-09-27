@@ -27,7 +27,7 @@ Installation
 
 License
 =======
-IB3 is licensed under the `GNU GPLv3+`_ license.
+IB3 is licensed under the `GPL-3.0-or-later`_ license.
 
 Credits
 =======
@@ -37,7 +37,7 @@ Some code and much inspiration taken from Wikimedia irc bots `Adminbot`_,
 .. _irc: https://pypi.org/project/irc/
 .. _mixin: https://en.wikipedia.org/wiki/Mixin
 .. _multiple inheritance: https://docs.python.org/3/tutorial/classes.html#multiple-inheritance
-.. _GNU GPLv3+: https://www.gnu.org/copyleft/gpl.html
+.. _GPL-3.0-or-later: https://www.gnu.org/copyleft/gpl.html
 .. _Adminbot: https://phabricator.wikimedia.org/diffusion/ODAC/
 .. _Jouncebot: https://phabricator.wikimedia.org/diffusion/GJOU/
 .. _Stashbot: https://phabricator.wikimedia.org/diffusion/LTST/
