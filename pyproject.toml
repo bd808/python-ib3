@@ -1,0 +1,54 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = [
+    "hatchling>=1.13",
+    "hatch-vcs>=0.3",
+]
+
+[project]
+name = "ib3"
+description = "IRC bot framework using mixins to provide common functionality"
+readme = "README.rst"
+license = "GPL-3.0-or-later"
+authors = [
+    { name = "Bryan Davis", email = "bd808@bd808.com" },
+]
+requires-python = ">=3.7"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Communications :: Chat :: Internet Relay Chat",
+]
+dynamic = [
+    "version",
+]
+dependencies = [
+    "irc>=20.0.0",
+]
+
+[project.urls]
+Homepage = "https://python-ib3.readthedocs.io/en/latest/"
+"Bug Tracker" = "https://github.com/bd808/python-ib3/issues"
+Source = "https://github.com/bd808/python-ib3"
+
+[tool.hatch]
+build.dev-mode-dirs = ["src"]
+build.targets.sdist.include = [
+    "/COPYING",
+    "/doc",
+    "/examples",
+    "/src",
+    "/tests",
+    "/tox.ini",
+]
+
+[tool.hatch.version]
+source = "vcs"
