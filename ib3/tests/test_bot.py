@@ -30,7 +30,7 @@ def test_construct_sets_lenient_decoding():
         realname='ib3test',
         nickname='ib3test',
     )
-    assert len(bot.server_list) == 1
+    assert bot.servers.peek() is not None
     assert jaraco.stream.buffer.LenientDecodingLineBuffer.errors == 'replace'
     assert irc.client.ServerConnection.buffer_class == \
         jaraco.stream.buffer.LenientDecodingLineBuffer
