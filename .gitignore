@@ -8,5 +8,4 @@
 /.venv/
 /build/
 /dist/
-/docs/
 __pycache__/
