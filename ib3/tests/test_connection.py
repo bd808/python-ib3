@@ -15,12 +15,6 @@
 #
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
-
-try:
-    from unittest import mock
-except ImportError:
-    import mock
-
 import ssl
 
 import ib3
@@ -31,9 +25,9 @@ class SSLBot(ib3.connection.SSL, ib3.Bot):
     pass
 
 
-@mock.patch('irc.bot.SingleServerIRCBot.__init__')
-@mock.patch('irc.connection.Factory')
-def test_ssl(conn_factory, mock_init):
+def test_ssl(mocker):
+    mock_init = mocker.patch('irc.bot.SingleServerIRCBot.__init__')
+    conn_factory = mocker.patch('irc.connection.Factory')
     bot = SSLBot(
         server_list=[('localhost', '9999')],
         realname='ib3test',

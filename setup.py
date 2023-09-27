@@ -2,18 +2,15 @@
 # -*- coding: utf-8 -*-
 import io
 import setuptools
-import sys
 
 setup_requires = [
     'setuptools_scm>=1.15.0',
 ]
-if 'nosetests' in sys.argv[1:]:
-    setup_requires.append('nose>=1.0')
 
 tests_require = [
-    'coverage',
-    "mock; python_version<'3.3'",
-    'nose>=1.0',
+    'pytest',
+    'pytest-cov',
+    'pytest-mock',
 ]
 
 name = 'ib3'
