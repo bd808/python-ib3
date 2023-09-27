@@ -22,8 +22,8 @@ inheritance`_::
 
 Installation
 ============
-* ``pip install ib3`` (recommended)
-* ``python setup.py install`` (from source distribution)
+* ``python3 -m pip install --upgrade ib3`` (recommended)
+* ``python3 -m pip install .`` (from source distribution)
 
 License
 =======
