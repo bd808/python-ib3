@@ -6,7 +6,7 @@ IRC bot framework using mixins to provide commonly desired functionality.
 .. image:: https://img.shields.io/pypi/v/ib3.svg
    :target: https://pypi.org/project/ib3
 
-.. image:: https://img.shields.io/github/actions/workflow/status/bd808/python-ib3/tox.yml?logo=github&style=for-the-badge
+.. image:: https://img.shields.io/github/actions/workflow/status/bd808/python-ib3/tox.yml?logo=github
    :target: https://github.com/bd808/python-ib3/actions/workflows/tox.yml
 
 .. image:: https://readthedocs.org/projects/python-ib3/badge/?version=latest
