@@ -52,3 +52,12 @@ build.targets.sdist.include = [
 
 [tool.hatch.version]
 source = "vcs"
+
+[tool.black]
+line_length = 88
+target_version = ["py37"]
+
+[tool.isort]
+known_first_party = ["ib3", "tests"]
+line_length = 88
+profile = "black"

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # This file is part of IRC Bot Behavior Bundle (IB3)
 # Copyright (C) 2017 Bryan Davis and contributors
@@ -22,11 +21,18 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class NicknameInUse(object):
+class NicknameInUse:
     """Handle ERR_NICKNAMEINUSE messages by changing to an alternate nick."""
+
     def __init__(
-            self, server_list, nickname, realname,
-            altnick=None, *args, **kwargs):
+        self,
+        server_list,
+        nickname,
+        realname,
+        altnick=None,
+        *args,  # noqa: U100 Unused argument
+        **kwargs,
+    ):
         """
         :param server_list: List of servers the bot will use.
         :param nickname: The bot's nickname
@@ -34,17 +40,20 @@ class NicknameInUse(object):
         :param altnick: Alternate nickname if primary nick is taken
         """
         self._primary_nick = nickname
-        self._altnick = altnick or nickname + '_'
+        self._altnick = altnick or nickname + "_"
 
-        super(NicknameInUse, self).__init__(
-                server_list=server_list,
-                nickname=nickname,
-                realname=realname,
-                **kwargs)
+        super().__init__(
+            server_list=server_list,
+            nickname=nickname,
+            realname=realname,
+            **kwargs,
+        )
         self.connection.add_global_handler(
-            'nicknameinuse', self._handle_nicknameinuse)
+            "nicknameinuse",
+            self._handle_nicknameinuse,
+        )
 
-    def _handle_nicknameinuse(self, conn, event):
+    def _handle_nicknameinuse(self, conn, event):  # noqa: U100 Unused argument
         """Handle ERR_NICKNAMEINUSE message.
 
         If failed nick matches our desired nick, switch to secondary nick, and
@@ -56,7 +65,8 @@ class NicknameInUse(object):
         logger.warning('Requested nick "%s" in use', nick)
         if nick == self._altnick:
             self.die(
-                'Cowardly refusing to fill the channel with copies of myself')
+                "Cowardly refusing to fill the channel with copies of myself",
+            )
         conn.nick(self._altnick)
         self.reactor.scheduler.execute_after(30, self._recover_nick)
 
@@ -83,14 +93,21 @@ class Ghost(NicknameInUse):
     This mixin assumes that you are also using a mixin from ``ib3.auth`` or
     another means to authenticate your IRC account.
     """
+
     def _recover_nick(self):
         """Recover nick by sending GHOST command to NickServ."""
         if not self.has_primary_nick():
             self.connection.privmsg(
-                'NickServ', 'GHOST {}'.format(self._primary_nick))
+                "NickServ",
+                f"GHOST {self._primary_nick}",
+            )
             self.reactor.scheduler.execute_after(
-                1, functools.partial(
-                    self.connection.nick, self._primary_nick))
+                1,
+                functools.partial(
+                    self.connection.nick,
+                    self._primary_nick,
+                ),
+            )
 
 
 class Regain(NicknameInUse):
@@ -102,8 +119,11 @@ class Regain(NicknameInUse):
     This mixin assumes that you are also using a mixin from ``ib3.auth`` or
     another means to authenticate your IRC account.
     """
+
     def _recover_nick(self):
         """Recover nick by sending REGAIN command to NickServ."""
         if not self.has_primary_nick():
             self.connection.privmsg(
-                'NickServ', 'REGAIN {}'.format(self._primary_nick))
+                "NickServ",
+                f"REGAIN {self._primary_nick}",
+            )

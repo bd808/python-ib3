@@ -4,6 +4,10 @@ UNRELEASED
 * Require irc>=20.0.0
 * Convert to hatchling build system backend
 * Replace Travis CI with GitHub Actions
+* Use pre-commit for linter checks
+* Use black for code formatting
+* Use isort for import formatting
+* Add a number of flake8 plugins including bugbear
 
 v0.2.0
 ------

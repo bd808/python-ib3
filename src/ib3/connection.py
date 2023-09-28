@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # This file is part of IRC Bot Behavior Bundle (IB3)
 # Copyright (C) 2017 Bryan Davis and contributors
@@ -24,9 +23,11 @@ import irc.connection
 logger = logging.getLogger(__name__)
 
 
-class SSL(object):
+class SSL:
     """Use SSL connections."""
+
     def __init__(self, *args, **kwargs):
-        kwargs['connect_factory'] = irc.connection.Factory(
-            wrapper=ssl.wrap_socket)
-        super(SSL, self).__init__(*args, **kwargs)
+        kwargs["connect_factory"] = irc.connection.Factory(
+            wrapper=ssl.wrap_socket,
+        )
+        super().__init__(*args, **kwargs)

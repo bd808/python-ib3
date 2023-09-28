@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # This file is part of IRC Bot Behavior Bundle (IB3)
 # Copyright (C) 2017 Bryan Davis and contributors
@@ -23,11 +22,10 @@ from ib3 import Bot
 from ib3.auth import NickServ
 from ib3.connection import SSL
 
-
 logging.basicConfig(
     level=logging.DEBUG,
-    format='%(asctime)s %(name)s %(levelname)s: %(message)s',
-    datefmt='%Y-%m-%dT%H:%M:%SZ'
+    format="%(asctime)s %(name)s %(levelname)s: %(message)s",
+    datefmt="%Y-%m-%dT%H:%M:%SZ",
 )
 logging.captureWarnings(True)
 
@@ -36,31 +34,33 @@ class TestBot(NickServ, SSL, Bot):
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description='Example bot with NickServ auth')
-    parser.add_argument('nick')
-    parser.add_argument('password')
-    parser.add_argument('channel')
+        description="Example bot with NickServ auth",
+    )
+    parser.add_argument("nick")
+    parser.add_argument("password")
+    parser.add_argument("channel")
     parser.add_argument(
-        '-u', '--username',
-        help='Account name if different than nick',
+        "-u",
+        "--username",
+        help="Account name if different than nick",
     )
     args = parser.parse_args()
 
     bot = TestBot(
-        server_list=[('irc.libera.chat', 6697)],
+        server_list=[("irc.libera.chat", 6697)],
         nickname=args.nick,
         realname=args.nick,
         username=args.username,
         ident_password=args.password,
-        channels=[args.channel]
+        channels=[args.channel],
     )
     try:
         bot.start()
     except KeyboardInterrupt:
-        bot.disconnect('KeyboardInterrupt!')
+        bot.disconnect("KeyboardInterrupt!")
     except Exception:
-        logging.getLogger('root').exception('Killed by unhandled exception')
-        bot.disconnect('Exception!')
+        logging.getLogger("root").exception("Killed by unhandled exception")
+        bot.disconnect("Exception!")
         raise SystemExit()
