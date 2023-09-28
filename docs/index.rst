@@ -23,3 +23,4 @@ IRC bot framework using mixins to provide commonly desired functionality.
 
    about
    ib3
+   changes
