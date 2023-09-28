@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # This file is part of IRC Bot Behavior Bundle (IB3)
 # Copyright (C) 2017 Bryan Davis and contributors
@@ -19,8 +18,8 @@
 import logging
 
 import irc.bot
-from jaraco.stream import buffer
 import irc.client
+from jaraco.stream import buffer
 
 logger = logging.getLogger(__name__)
 
@@ -32,11 +31,11 @@ class Bot(irc.bot.SingleServerIRCBot):
     UTF-8 encoding handling for inbound messages. This is a nice base to start
     from when adding other IB3 mixins.
     """
+
     def __init__(self, *args, **kwargs):
         # A UTF-8 only world is a nice dream but the real world is all yucky
         # and full of legacy encoding issues that should not crash our bot.
-        buffer.LenientDecodingLineBuffer.errors = 'replace'
-        irc.client.ServerConnection.buffer_class = \
-            buffer.LenientDecodingLineBuffer
+        buffer.LenientDecodingLineBuffer.errors = "replace"
+        irc.client.ServerConnection.buffer_class = buffer.LenientDecodingLineBuffer
 
-        super(Bot, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)

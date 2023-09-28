@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # This file is part of IRC Bot Behavior Bundle (IB3)
 # Copyright (C) 2017 Bryan Davis and contributors
@@ -26,24 +25,24 @@ import ib3.auth
 import ib3.connection
 import ib3.nick
 
-
 logging.basicConfig(
     level=logging.DEBUG,
-    format='%(asctime)s %(name)s %(levelname)s: %(message)s',
-    datefmt='%Y-%m-%dT%H:%M:%SZ'
+    format="%(asctime)s %(name)s %(levelname)s: %(message)s",
+    datefmt="%Y-%m-%dT%H:%M:%SZ",
 )
 logging.captureWarnings(True)
 
-logger = logging.getLogger('saslbot')
+logger = logging.getLogger("saslbot")
 
 
 class SaslBot(ib3.auth.SASL, ib3.nick.Regain, ib3.connection.SSL, ib3.Bot):
     """Example bot showing use of SASL auth, REGAIN, and SSL encryption."""
+
     def on_privmsg(self, conn, event):
         self.do_command(conn, event, event.arguments[0])
 
     def on_pubmsg(self, conn, event):
-        args = event.arguments[0].split(':', 1)
+        args = event.arguments[0].split(":", 1)
         if len(args) > 1:
             to = irc.strings.lower(args[0])
             if to == irc.strings.lower(conn.get_nickname()):
@@ -54,27 +53,28 @@ class SaslBot(ib3.auth.SASL, ib3.nick.Regain, ib3.connection.SSL, ib3.Bot):
         if to == conn.get_nickname():
             to = event.source.nick
 
-        if cmd == 'disconnect':
+        if cmd == "disconnect":
             self.disconnect()
-        elif cmd == 'die':
+        elif cmd == "die":
             self.die()
         else:
-            conn.privmsg(to, 'What does "{}" mean?'.format(cmd))
+            conn.privmsg(to, f'What does "{cmd}" mean?')
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Example bot with SASL auth')
-    parser.add_argument('nick')
-    parser.add_argument('password')
-    parser.add_argument('channel')
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Example bot with SASL auth")
+    parser.add_argument("nick")
+    parser.add_argument("password")
+    parser.add_argument("channel")
     parser.add_argument(
-        '-u', '--username',
-        help='Account name if different than nick',
+        "-u",
+        "--username",
+        help="Account name if different than nick",
     )
     args = parser.parse_args()
 
     bot = SaslBot(
-        server_list=[('irc.libera.chat', 6697)],
+        server_list=[("irc.libera.chat", 6697)],
         nickname=args.nick,
         realname=args.nick,
         username=args.username,
@@ -84,8 +84,8 @@ if __name__ == '__main__':
     try:
         bot.start()
     except KeyboardInterrupt:
-        bot.disconnect('KeyboardInterrupt!')
+        bot.disconnect("KeyboardInterrupt!")
     except Exception:
-        logger.exception('Killed by unhandled exception')
-        bot.disconnect('Exception!')
+        logger.exception("Killed by unhandled exception")
+        bot.disconnect("Exception!")
         raise SystemExit()

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # This file is part of IRC Bot Behavior Bundle (IB3)
 # Copyright (C) 2017 Bryan Davis and contributors
 #
@@ -18,19 +16,18 @@
 
 # Dummy test file that really tests nothing other than that imports succeed
 
-import irc.client
-import jaraco.stream
-
 import ib3
+import ib3.auth
+import ib3.connection
+import ib3.mixins
+import ib3.nick
 
-
-def test_construct_sets_lenient_decoding():
-    bot = ib3.Bot(
-        server_list=[('localhost', '9999')],
-        realname='ib3test',
-        nickname='ib3test',
-    )
-    assert bot.servers.peek() is not None
-    assert jaraco.stream.buffer.LenientDecodingLineBuffer.errors == 'replace'
-    assert irc.client.ServerConnection.buffer_class == \
-        jaraco.stream.buffer.LenientDecodingLineBuffer
+any(
+    (
+        ib3,
+        ib3.auth,
+        ib3.connection,
+        ib3.mixins,
+        ib3.nick,
+    ),
+)  # Ignore unused import warning

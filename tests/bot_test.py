@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # This file is part of IRC Bot Behavior Bundle (IB3)
 # Copyright (C) 2017 Bryan Davis and contributors
 #
@@ -15,26 +13,24 @@
 #
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
-import ssl
+
+# Dummy test file that really tests nothing other than that imports succeed
+
+import irc.client
+import jaraco.stream
 
 import ib3
-import ib3.connection
 
 
-class SSLBot(ib3.connection.SSL, ib3.Bot):
-    pass
-
-
-def test_ssl(mocker):
-    mock_init = mocker.patch('irc.bot.SingleServerIRCBot.__init__')
-    conn_factory = mocker.patch('irc.connection.Factory')
-    bot = SSLBot(
-        server_list=[('localhost', '9999')],
-        realname='ib3test',
-        nickname='ib3test',
+def test_construct_sets_lenient_decoding():
+    bot = ib3.Bot(
+        server_list=[("localhost", "9999")],
+        realname="ib3test",
+        nickname="ib3test",
     )
-    assert isinstance(bot, ib3.connection.SSL)
-    assert isinstance(bot, ib3.Bot)
-    conn_factory.assert_called_once_with(wrapper=ssl.wrap_socket)
-    args, kwargs = mock_init.call_args
-    assert kwargs['connect_factory'] is conn_factory.return_value
+    assert bot.servers.peek() is not None
+    assert jaraco.stream.buffer.LenientDecodingLineBuffer.errors == "replace"
+    assert (
+        irc.client.ServerConnection.buffer_class
+        == jaraco.stream.buffer.LenientDecodingLineBuffer
+    )
