@@ -13,7 +13,7 @@ IRC bot framework using mixins to provide commonly desired functionality.
    :target: https://python-ib3.readthedocs.io
 
 .. image:: https://img.shields.io/pypi/l/ib3.svg
-   :target: https://github.com/bd808/python-ib3/blob/master/COPYING
+   :target: https://github.com/bd808/python-ib3/blob/main/COPYING
 
 .. image:: https://img.shields.io/github/forks/bd808/python-ib3.svg?style=social&label=Fork
    :target: https://github.com/bd808/python-ib3
