@@ -19,6 +19,8 @@
 import base64
 import logging
 
+import irc.events
+
 from .mixins import JoinChannels
 
 logger = logging.getLogger(__name__)
@@ -96,12 +98,21 @@ class SASL(AbstractAuth):
     """Authenticate using SASL before joining channels."""
     def __init__(self, *args, **kwargs):
         super(SASL, self).__init__(*args, **kwargs)
+
+        listen = {
+            'cap': 'cap',
+            'authenticate': 'authenticate',
+            'saslsuccess': irc.events.numeric.get('903', '903'),
+            'saslmechs': irc.events.numeric.get('908', '908'),
+            'welcome': 'welcome',
+        }
+
         self.reactor._on_connect = self._handle_connect
 
-        for event in ['cap', 'authenticate', '903', '908', 'welcome']:
+        for handler, event in listen.items():
             logger.debug('Registering for %s', event)
             self.connection.add_global_handler(
-                event, getattr(self, '_handle_%s' % event))
+                event, getattr(self, '_handle_%s' % handler))
 
     def _handle_connect(self, sock):
         """Send CAP REQ :sasl on connect."""
@@ -112,7 +123,7 @@ class SASL(AbstractAuth):
         if event.arguments and event.arguments[0] == 'ACK':
             conn.send_raw('AUTHENTICATE PLAIN')
         else:
-            logger.warning('Unexpcted CAP response: %s', event)
+            logger.warning('Unexpected CAP response: %s', event)
             conn.disconnect()
 
     def _handle_authenticate(self, conn, event):
@@ -124,14 +135,14 @@ class SASL(AbstractAuth):
             conn.send_raw('AUTHENTICATE {}'.format(
                     base64.b64encode(creds.encode('utf8')).decode('utf8')))
         else:
-            logger.warning('Unexpcted AUTHENTICATE response: %s', event)
+            logger.warning('Unexpected AUTHENTICATE response: %s', event)
             conn.disconnect()
 
-    def _handle_903(self, conn, event):
+    def _handle_saslsuccess(self, conn, event):
         """Handle 903 RPL_SASLSUCCESS responses."""
         self.connection.cap('END')
 
-    def _handle_908(self, conn, event):
+    def _handle_saslmechs(self, conn, event):
         """Handle 908 RPL_SASLMECHS responses."""
         logger.warning('SASL PLAIN not supported: %s', event)
         self.die()
