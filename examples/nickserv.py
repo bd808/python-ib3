@@ -21,6 +21,7 @@ import logging
 
 from ib3 import Bot
 from ib3.auth import NickServ
+from ib3.connection import SSL
 
 
 logging.basicConfig(
@@ -31,7 +32,7 @@ logging.basicConfig(
 logging.captureWarnings(True)
 
 
-class TestBot(NickServ, Bot):
+class TestBot(NickServ, SSL, Bot):
     pass
 
 
@@ -41,12 +42,17 @@ if __name__ == '__main__':
     parser.add_argument('nick')
     parser.add_argument('password')
     parser.add_argument('channel')
+    parser.add_argument(
+        '-u', '--username',
+        help='Account name if different than nick',
+    )
     args = parser.parse_args()
 
     bot = TestBot(
-        server_list=[('chat.freenode.net', 6667)],
+        server_list=[('irc.libera.chat', 6697)],
         nickname=args.nick,
         realname=args.nick,
+        username=args.username,
         ident_password=args.password,
         channels=[args.channel]
     )
