@@ -1,4 +1,4 @@
-UNRELEASED
+v0.3.0
 ----------
 * [BREAKING] Drop support for Python versions before 3.7
 * Require irc>=20.0.0
@@ -8,6 +8,7 @@ UNRELEASED
 * Use black for code formatting
 * Use isort for import formatting
 * Add a number of flake8 plugins including bugbear
+* Automated PyPi publishing via GitHub Actions
 
 v0.2.0
 ------
