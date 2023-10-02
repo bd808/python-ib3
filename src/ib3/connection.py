@@ -1,4 +1,3 @@
-#
 # This file is part of IRC Bot Behavior Bundle (IB3)
 # Copyright (C) 2017 Bryan Davis and contributors
 #
@@ -14,7 +13,6 @@
 #
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
-
 import logging
 import ssl
 
@@ -27,7 +25,15 @@ class SSL:
     """Use SSL connections."""
 
     def __init__(self, *args, **kwargs):
+        self._ssl_context = ssl.SSLContext(protocol=ssl.PROTOCOL_TLS_CLIENT)
+        self._ssl_context.load_default_certs()
+        # Unfortunately the upstream library doesn't give us a simple way to
+        # pass the IRC server hostname to the socket factory for SNI and cert
+        # verification. See https://github.com/jaraco/irc/issues/216
+        self._ssl_context.check_hostname = False
+        self._ssl_context.verify_mode = ssl.CERT_NONE
+
         kwargs["connect_factory"] = irc.connection.Factory(
-            wrapper=ssl.wrap_socket,
+            wrapper=self._ssl_context.wrap_socket,
         )
         super().__init__(*args, **kwargs)
