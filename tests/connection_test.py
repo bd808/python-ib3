@@ -13,8 +13,6 @@
 #
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
-import ssl
-
 import ib3
 import ib3.connection
 
@@ -33,6 +31,6 @@ def test_ssl(mocker):
     )
     assert isinstance(bot, ib3.connection.SSL)
     assert isinstance(bot, ib3.Bot)
-    conn_factory.assert_called_once_with(wrapper=ssl.wrap_socket)
+    conn_factory.assert_called_once_with(wrapper=bot._ssl_context.wrap_socket)
     args, kwargs = mock_init.call_args
     assert kwargs["connect_factory"] is conn_factory.return_value

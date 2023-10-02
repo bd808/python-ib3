@@ -1,5 +1,9 @@
-v0.3.0
+UNRELEASED
 ----------
+* Use ssl.SSLContext in ib3.connection.SSL
+
+v0.3.0
+------
 * [BREAKING] Drop support for Python versions before 3.7
 * Require irc>=20.0.0
 * Convert to hatchling build system backend
