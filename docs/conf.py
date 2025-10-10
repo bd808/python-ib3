@@ -2,8 +2,6 @@
 import datetime
 import importlib.metadata
 
-import sphinx_rtd_theme
-
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
@@ -30,7 +28,6 @@ release = version
 master_doc = "index"
 pygments_style = "sphinx"
 html_theme = "sphinx_rtd_theme"
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 html_static_path = ["_static"]
 
 suppress_warnings = ["image.nonlocal_uri"]
