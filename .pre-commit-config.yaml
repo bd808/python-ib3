@@ -1,8 +1,8 @@
 default_language_version:
-    python: python3.11
+    python: python3.13
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v6.0.0
     hooks:
       - id: check-ast
       - id: check-builtin-literals
@@ -15,52 +15,52 @@ repos:
       - id: trailing-whitespace
       - id: name-tests-test
   - repo: https://github.com/asottile/add-trailing-comma
-    rev: v3.1.0
+    rev: v3.2.0
     hooks:
       - id: add-trailing-comma
         args: ["--py36-plus"]
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.13.0
+    rev: v3.21.0
     hooks:
       - id: pyupgrade
         args: ["--py37-plus"]
   - repo: https://github.com/PyCQA/isort
-    rev: 5.12.0
+    rev: 6.1.0
     hooks:
       - id: isort
         args: ["--profile", "black", "--filter-files"]
   - repo: https://github.com/psf/black
-    rev: 23.9.1
+    rev: 25.9.0
     hooks:
       - id: black
   - repo: https://github.com/asottile/blacken-docs
-    rev: 1.16.0
+    rev: 1.20.0
     hooks:
       - id: blacken-docs
-        additional_dependencies: [black==23.9.1]
+        additional_dependencies: [black==25.9.0]
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.10.0
     hooks:
       - id: rst-backticks
   - repo: https://github.com/tox-dev/tox-ini-fmt
-    rev: "1.3.1"
+    rev: "1.7.0"
     hooks:
       - id: tox-ini-fmt
         args: ["-p", "lint"]
   - repo: https://github.com/PyCQA/flake8
-    rev: 6.1.0
+    rev: 7.3.0
     hooks:
       - id: flake8
         additional_dependencies:
-          - flake8-bugbear==23.3.12
-          - flake8-comprehensions==3.11.1
-          - flake8-pytest-style==1.7.2
+          - flake8-bugbear==24.12.12
+          - flake8-comprehensions==3.17.0
+          - flake8-pytest-style==2.1.0
           - flake8-unused-arguments==0.0.13
-          - flake8-noqa==1.3.1
-          - pep8-naming==0.13.3
+          - flake8-noqa==1.4.0
+          - pep8-naming==0.15.1
           - flake8-pyproject==1.2.3
   - repo: https://github.com/PyCQA/doc8
-    rev: v1.1.1
+    rev: v2.0.0
     hooks:
       - id: doc8
   - repo: meta
@@ -68,6 +68,6 @@ repos:
       - id: check-hooks-apply
       - id: check-useless-excludes
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.6.26
+    rev: v1.7.7
     hooks:
       - id: actionlint
